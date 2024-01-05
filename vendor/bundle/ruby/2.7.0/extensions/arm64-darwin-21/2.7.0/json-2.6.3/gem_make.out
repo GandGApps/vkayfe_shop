@@ -1,0 +1,13 @@
+current directory: /Users/vostanpetrosyan/Desktop/gift_shop/vendor/bundle/ruby/2.7.0/gems/json-2.6.3/ext/json
+/Users/vostanpetrosyan/.rvm/rubies/ruby-2.7.5/bin/ruby -I /Users/vostanpetrosyan/.rvm/rubies/ruby-2.7.5/lib/ruby/2.7.0 -r ./siteconf20230619-1124-70bltc.rb extconf.rb
+creating Makefile
+
+current directory: /Users/vostanpetrosyan/Desktop/gift_shop/vendor/bundle/ruby/2.7.0/gems/json-2.6.3/ext/json
+make "DESTDIR=" clean
+
+current directory: /Users/vostanpetrosyan/Desktop/gift_shop/vendor/bundle/ruby/2.7.0/gems/json-2.6.3/ext/json
+make "DESTDIR="
+make: Nothing to be done for `all'.
+
+current directory: /Users/vostanpetrosyan/Desktop/gift_shop/vendor/bundle/ruby/2.7.0/gems/json-2.6.3/ext/json
+make "DESTDIR=" install

@@ -1,0 +1,6 @@
+export const SET_CUSTOMER = "SET_CUSTOMER";
+export const SET_CUSTOMER_DELETE = "SET_CUSTOMER_DELETE";
+export const SET_FILTER = "SET_FILTER";
+export const SET_FILTER_DELETE = "SET_FILTER_DELETE";
+export const EDIT_GOODS = "EDIT_GOODS";
+export const EDIT_GOODS_DELETE = "EDIT_GOODS_DELETE";
