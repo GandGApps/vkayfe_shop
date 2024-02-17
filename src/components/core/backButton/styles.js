@@ -1,5 +1,5 @@
 import { Colors } from "../../../constants";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { globalHeight, globalWidth } from "../../dimensions";
 
 let width = Dimensions.get("window").width;
@@ -22,6 +22,7 @@ export const styles = StyleSheet.create({
   container: {
     justifyContent: "space-between",
     marginHorizontal: globalWidth(20),
+    marginTop:Platform.OS === 'ios' ? globalHeight(30) : 0
   },
   textDelete: {
     fontSize: globalWidth(10),

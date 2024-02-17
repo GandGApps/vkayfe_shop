@@ -68,7 +68,7 @@ export const styles = StyleSheet.create({
   },
   bckCont:{
     position:'absolute',
-    top:globalHeight(30),
+    top:Platform.OS === 'ios' ? globalHeight(60) :  globalHeight(30),
     left:globalWidth(30),
     zIndex:50
   },

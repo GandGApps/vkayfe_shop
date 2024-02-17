@@ -45,6 +45,8 @@ export const MyDetailsScreen = ({ navigation }) => {
       dispatch({
         type: SET_CUSTOMER_DELETE,
       });
+      await AsyncStorage.removeItem("fcmToken");
+
       navigation.replace("AuthNavigation");
       setLoading(false);
     } catch (e) {
@@ -70,7 +72,7 @@ export const MyDetailsScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} bounces={false}>
       <View style={styles.contentMyDetailsAll}>
         <View>
           <BackButton

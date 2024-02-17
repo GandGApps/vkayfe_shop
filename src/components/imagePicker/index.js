@@ -3,6 +3,7 @@ import { Alert, PermissionsAndroid } from "react-native";
 
 
 export const requestCameraPermission = async () => {
+
   try {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -35,7 +36,7 @@ export function ChooseImage(callBack) {
             {
               mediaType: "photo",
               includeBase64: true,
-              quality:1,
+              quality: 1,
             },
             (response) => {
               if (!response.didCancel) {
@@ -47,14 +48,14 @@ export function ChooseImage(callBack) {
       },
       {
         text: "сделать фото", onPress: async () => {
-          if (await requestCameraPermission()) {
+          if (Platform.OS === "ios") {
             await launchCamera(
               {
                 storageOptions: { privateDirectory: true },
-                cropping:true,
+                cropping: true,
                 mediaType: "photo",
                 includeBase64: true,
-                quality:1
+                quality: 1,
 
               },
               (response) => {
@@ -64,8 +65,27 @@ export function ChooseImage(callBack) {
               },
             );
           } else {
-            await requestCameraPermission();
+            if (await requestCameraPermission()) {
+              await launchCamera(
+                {
+                  storageOptions: { privateDirectory: true },
+                  cropping: true,
+                  mediaType: "photo",
+                  includeBase64: true,
+                  quality: 1,
+
+                },
+                (response) => {
+                  if (!response.didCancel) {
+                    callBack(response);
+                  }
+                },
+              );
+            } else {
+              await requestCameraPermission();
+            }
           }
+
         },
       },
     ],
@@ -80,7 +100,7 @@ export async function MultipleImage(callBack) {
       selectionLimit: 5,
       mediaType: "photo",
       includeBase64: false,
-      quality: 1
+      quality: 1,
     },
     (response) => {
       if (!response.didCancel) {

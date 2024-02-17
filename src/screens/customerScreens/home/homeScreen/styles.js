@@ -13,6 +13,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: globalWidth(15),
     paddingBottom: globalHeight(20),
   },
+  prod:{
+    lineHeight: globalHeight(20),
+    textAlign:'center',
+    marginTop:globalWidth(3)
+  },
   headerTextContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -26,7 +31,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: globalHeight(9),
-    marginBottom: globalHeight(20),
+    marginBottom: globalHeight(9),
   },
   filterContainer: {
     borderWidth: 1,
@@ -65,6 +70,7 @@ export const styles = StyleSheet.create({
   winIconStyle: {
     width: globalWidth(20),
     height: globalWidth(20),
+    resizeMode:'contain'
   },
   HeaderFooter: {
     flexDirection: "row",

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { styles } from "./styles";
-import { View, Text, TouchableOpacity, Image, FlatList, StatusBar } from "react-native";
+import { View, Text, TouchableOpacity, Image, FlatList, StatusBar, Platform } from "react-native";
 import { BackButton, CategoryData, FinancialData_, FinancialForm, FormCategory } from "../../../../components";
 import { Colors, FilterName, FinancialFilterName, globalStyles } from "../../../../constants";
 import FilterIcon from "../../../../assets/images/filter.png";
 import axiosInstance from "../../../../networking/axiosInstance";
 import moment from 'moment'
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const FinancialReportScreen = ({ navigation }) => {
   const [finances, setFinances] = useState([]);
@@ -61,9 +62,12 @@ export const FinancialReportScreen = ({ navigation }) => {
 
 
   return (
-    <View style={globalStyles.container}>
+    <View style={[globalStyles.container,  Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}]}>
       <StatusBar barStyle="dark-content" hidden={false} backgroundColor={Colors.blueBackground} />
-      <View style={styles.headerContainer}>
+      <View style={[styles.headerContainer,
+        Platform.OS === 'ios' &&{paddingTop:  (getStatusBarHeight(true) +8)}
+
+      ]}>
         <BackButton
           navigation={navigation}
           text={"Финансовый отчет"}

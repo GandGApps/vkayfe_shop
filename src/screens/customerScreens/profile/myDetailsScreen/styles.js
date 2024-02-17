@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { globalHeight, globalWidth } from "../../../../components";
 import { Colors } from "../../../../constants";
 
@@ -17,6 +17,8 @@ export const styles = StyleSheet.create({
   stylesBack: {
     marginTop: globalWidth(14),
     marginBottom: globalHeight(39),
+    paddingTop:Platform.OS === 'ios' ? globalHeight(25) : 0
+
   },
   contentMyDetails: {
     borderBottomWidth: 1,

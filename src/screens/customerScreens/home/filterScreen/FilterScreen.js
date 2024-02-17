@@ -174,7 +174,7 @@ export const FilterScreen = ({ navigation }) => {
         <View style={styles.containerCategory}>
           <Text
             style={[globalStyles.titleText, globalStyles.textAlignLeft, styles.titleCategory, globalStyles.weightBold, globalStyles.titleTextSmall]}>Сортировка</Text>
-          <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
+          <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} bounces={false}>
             {sort.map((item, index) => {
               return (
                 <FilterForm

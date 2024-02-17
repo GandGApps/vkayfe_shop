@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   },
   headerFooter: {
     justifyContent: "space-between",
-    marginTop: globalWidth(20),
+    marginTop: globalWidth(15),
     paddingHorizontal: globalWidth(40),
 
   },
@@ -34,7 +34,6 @@ export const styles = StyleSheet.create({
   },
   textZakaz:{
     marginLeft:globalWidth(20),
-    marginVertical:globalHeight(20)
   },
   noDataText:{
     width:globalWidth(262),

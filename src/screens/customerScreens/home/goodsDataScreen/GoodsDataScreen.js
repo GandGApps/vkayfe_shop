@@ -21,9 +21,8 @@ export const GoodsDataScreen = ({ navigation, route }) => {
 
   const closeModal = () => { if (active) {
     setActive(false) } }
-
   return (
-    <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={globalStyles.scrollContainer} bounces={false}>
       <View style={styles.cont}>
         <View>
           <LinearGradient

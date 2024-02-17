@@ -25,7 +25,6 @@ export const ApplicationsDataScreen = ({ navigation, route }) => {
   useEffect(() => {
     statusDataFetch();
   }, []);
-
   const statusDataFetch = async () => {
     try {
       const response = await axiosInstance.get("/orders/status");
@@ -94,7 +93,7 @@ export const ApplicationsDataScreen = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={[globalStyles.scrollContainer]}>
+    <ScrollView contentContainerStyle={[globalStyles.scrollContainer]} bounces={false}>
       <StatusBar barStyle="dark-content" hidden={false} backgroundColor={Colors.blueBackground} />
       <View style={styles.headerContainer}>
         <View style={styles.headerPadding}>
@@ -153,7 +152,7 @@ export const ApplicationsDataScreen = ({ navigation, route }) => {
             <View style={styles.countryView}>
               <Text
                 style={[globalStyles.titleText, globalStyles.weightLight, globalStyles.titleTextSmall, globalStyles.textAlignLeft]}>Адрес</Text>
-              <Text>{item.delivery_address}</Text>
+              <Text>{item?.count[0]?.addressAll} {item.delivery_address}</Text>
             </View>
             <View style={styles.countryView}>
               <Text style={[globalStyles.titleText, globalStyles.weightLight, globalStyles.titleTextSmall, globalStyles.textAlignLeft]}>Имя получателя</Text>

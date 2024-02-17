@@ -88,7 +88,7 @@ export const FinancialFilterScreen = ({ navigation, route }) => {
         />
         <View style={styles.containerCategory}>
           <Text style={[styles.titleCategory,globalStyles.titleText,globalStyles.textAlignLeft,styles.titleCategory,globalStyles.weightBold,globalStyles.titleTextSmall]}>Сортировка</Text>
-          <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
+          <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} bounces={false}>
             {sort.map((item, index) => {
               return (
                 <FilterForm

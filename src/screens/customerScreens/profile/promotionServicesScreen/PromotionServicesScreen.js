@@ -60,6 +60,7 @@ export const PromotionServicesScreen = ({ navigation, route }) => {
       <WebView
         ref={setRef} source={{ uri: url }} style={{ flex: 1 }}
         onError={event => {
+          navigation.goBack();
           if (!event.nativeEvent.url.includes("success")) {
             navigation.goBack();
           }
@@ -69,9 +70,10 @@ export const PromotionServicesScreen = ({ navigation, route }) => {
             successFunc();
           }
         }}
+        containerStyle={{marginTop:25}}
       />
       :
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} bounces={false}>
         <View style={styles.headerContainer}>
           <View style={styles.backContainer}>
             <BackButton navigation={navigation} />
@@ -81,8 +83,11 @@ export const PromotionServicesScreen = ({ navigation, route }) => {
         <View>
           <Text style={[globalStyles.titleText, globalStyles.titleTextBig, styles.titleText]}>Услуги продвижения</Text>
           <Text style={[globalStyles.titleText, globalStyles.weightLight, styles.contentText]}>
-            Lorem ipsum dolor sit amet consectetur. Et eget est aenean lacinia neque. At vestibulum donec nisi pharetra.
-            Pulvinar sed urna risus elit ullamcorper non erat viverra quis orci viverra augue.
+            Услуга продвижения предоставляет вам дополнительные возможности для увеличения продаж на платформе. С ее помощью вы можете вывести в ТОП 5 своих самых лучших товаров, которые будут иметь
+            более высокий приоритет в результатах поиска, тем самым больший спрос у покупателей.
+            Товары будут показываться рандомно совместно с участниками, кто так же приобрел услугу.
+            Срок действия - 5 дней.
+            Проданные товары по услуге переходят в стандартный статус.
           </Text>
           {state ?
             <Text

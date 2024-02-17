@@ -1,10 +1,11 @@
 import React from "react";
 import { styles } from "./styles";
-import { Image, ScrollView, StatusBar, Text,  View } from "react-native";
-import place from "../../../../assets/images/place.png";
+import { Image, Platform, ScrollView, StatusBar, Text, View } from "react-native";
+import place from "../../../../assets/images/wing.png";
 import { AppButton, BackButton } from "../../../../components";
 import { Colors, CreateShopName, DeleteShopName, globalStyles } from "../../../../constants";
 import { useSelector } from "react-redux";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const ShopDataScreen = ({ navigation, route }) => {
   const shop = route.params?.shop ? route.params?.shop : useSelector((st)=>st.customer.active_store);
@@ -14,10 +15,14 @@ export const ShopDataScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={[styles.container, globalStyles.container]}>
+    <View style={[styles.container, globalStyles.container,      Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+    ]}>
       <StatusBar barStyle="dark-content" hidden={false} backgroundColor={Colors.blueBackground} />
       <View>
-        <View style={styles.headerContainer}>
+        <View style={[styles.headerContainer,
+          Platform.OS === 'ios' &&{paddingTop:  (getStatusBarHeight(true) +8)}
+
+        ]}>
           <BackButton
             navigation={navigation}
           />
@@ -42,7 +47,7 @@ export const ShopDataScreen = ({ navigation, route }) => {
             <Text style={[globalStyles.titleText, globalStyles.weightLight, globalStyles.titleTextSmall, globalStyles.textAlignLeft, styles.dataText]}>СБ-ВС: {shop?.weekends?.from}—{shop?.weekends?.to}</Text>
           }
         </View>
-        <ScrollView contentContainerStyle={styles.scrollView}>
+        <ScrollView contentContainerStyle={styles.scrollView} bounces={false}>
           <Text
             style={[globalStyles.titleText, globalStyles.titleTextSmall, styles.inputBigText, styles.proText, globalStyles.textAlignLeft]}>Про
             нас</Text>

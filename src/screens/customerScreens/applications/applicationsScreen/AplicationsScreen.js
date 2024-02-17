@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { styles } from "./styles";
-import { FlatList, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Platform, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { Colors, globalStyles } from "../../../../constants";
-import { ApplicationsData_, ApplicationsForm, FilterData, FilterForm, FormSubCategory } from "../../../../components";
+import {
+  ApplicationsData_,
+  ApplicationsForm,
+  FilterData,
+  FilterForm,
+  FormSubCategory,
+  globalWidth,
+} from "../../../../components";
 import axiosInstance from "../../../../networking/axiosInstance";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 
 export const AplicationsScreen = ({ navigation }) => {
@@ -228,10 +236,15 @@ export const AplicationsScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={[globalStyles.container]}>
+    <View style={[globalStyles.container,
+      Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+    ]}>
       <StatusBar barStyle="dark-content" hidden={false} backgroundColor={Colors.blueBackground} />
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
+      <View style={[styles.container,
+      ]}>
+        <View style={[styles.headerContainer,
+          Platform.OS === 'ios' &&{paddingTop:  (getStatusBarHeight(true) + globalWidth(25))}
+        ]}>
           <Text
             style={[globalStyles.titleText, globalStyles.textAlignLeft, globalStyles.weightBold, globalStyles.titleTextBig, styles.textZakaz]}>Заказы</Text>
           <View style={[globalStyles.row, styles.headerFooter]}>
@@ -270,7 +283,7 @@ export const AplicationsScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
+        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} bounces={false}>
           {sort.map((item, index) => {
             return (
               <FilterForm

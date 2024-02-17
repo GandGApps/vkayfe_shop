@@ -22,6 +22,7 @@ import bottomIcon from "../../../assets/images/bottomIcon.png";
 
 import { BaseUrl, Colors, globalStyles, SET_CUSTOMER } from "../../../constants";
 import SelectDropdown from "react-native-select-dropdown";
+import ImageResizer from "@bam.tech/react-native-image-resizer";
 
 export const CreateShopScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -149,6 +150,7 @@ export const CreateShopScreen = ({ navigation, route }) => {
           name: "avatar.jpg",
           type: photo.type,
         });
+        console.log(formData)
         const response = await axiosInstance.post(`/stores/my`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -252,7 +254,24 @@ export const CreateShopScreen = ({ navigation, route }) => {
     try {
       ChooseImage(async (imageRes) => {
         if (!imageRes.didCancel) {
-          setPhoto(imageRes.assets[0]);
+          const response = await ImageResizer.createResizedImage(
+            imageRes.assets[0].uri ?? '',
+            600,
+            240,
+            'JPEG',
+            100,
+            0,
+            undefined,
+            false,
+            {
+              mode: 'cover',
+            },
+          );
+          console.log(imageRes.assets[0])
+          setPhoto({
+            ...response,
+            type:'image/jpeg'
+          });
         }
       });
     } catch (err) {
@@ -383,7 +402,7 @@ export const CreateShopScreen = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={globalStyles.scrollContainer} bounces={false}>
       <View>
         {route?.params?.state && (
           <BackButton
@@ -561,6 +580,9 @@ export const CreateShopScreen = ({ navigation, route }) => {
         open={open}
         locale={"ru"}
         is24hourSource={"locale"}
+        title={'Выберите время'}
+        confirmText="OK" // Set your confirm button text here
+        cancelText="Отмена" // Set your cancel button text here
         mode={"time"}
         date={date}
         onConfirm={(date) => {

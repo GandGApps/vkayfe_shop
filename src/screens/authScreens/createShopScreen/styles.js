@@ -1,5 +1,5 @@
 import { Colors } from "../../../constants";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { globalHeight, globalWidth } from "../../../components";
 
 let width = Dimensions.get("window").width;
@@ -112,7 +112,8 @@ export const styles = StyleSheet.create({
     marginBottom: globalHeight(35),
   },
   backBtn: {
-    marginTop: globalHeight(20),
+    paddingTop:Platform.OS === 'ios' ? globalHeight(25) : 0
+
   },
   TextTaxi: {
     color: Colors.gray,

@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { globalHeight, globalWidth } from "../../../../components";
 import { Colors } from "../../../../constants";
 import category_bottom from "../../../../assets/images/categroy_bottom.png";
@@ -19,6 +19,8 @@ export const styles = StyleSheet.create({
     fontSize: globalWidth(25),
     marginBottom: globalHeight(43),
     marginTop: globalHeight(13),
+    paddingTop:Platform.OS === 'ios' ? globalHeight(25) : 0
+
   },
   cameraContainer: {
     alignItems: "center",
@@ -66,13 +68,14 @@ export const styles = StyleSheet.create({
     paddingTop: globalHeight(23),
   },
   inputBig: {
-    paddingTop: 0,
     borderWidth: 1,
-    paddingBottom: 0,
     marginBottom: globalHeight(50),
     textAlignVertical: "top",
     height: globalHeight(139),
     borderRadius: 8,
+    paddingHorizontal:globalHeight(10),
+    paddingTop:globalHeight(10),
+    paddingBottom:globalHeight(5),
   },
   btnStyle: {
     marginBottom: globalHeight(20),

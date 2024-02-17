@@ -55,7 +55,7 @@ export const EditMyDetailsScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={globalStyles.scrollContainer} bounces={false}>
       <View style={styles.contentMyDetailsAll}>
         <View>
           <BackButton

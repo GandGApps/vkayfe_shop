@@ -5,9 +5,9 @@ import {
   MultipleImage,
   AppInput,
   Loading,
-  TimeModal,
+  TimeModal, globalHeight,
 } from "../../../../components";
-import { View, Text, TouchableOpacity, ScrollView, Image, StatusBar } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image, StatusBar, Platform } from "react-native";
 
 import closeIcon from "../../../../assets/images/closeIcon.png";
 import { BaseUrl, CategoryName, Colors, globalStyles, HomeScreenName, SaveItemName } from "../../../../constants";
@@ -19,6 +19,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import active from "../../../../assets/images/active.png";
 import noActive from "../../../../assets/images/noActive.png";
 import category_bottom from "../../../../assets/images/categroy_bottom.png";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const EditGoodsScreen = ({ navigation, route }) => {
   const item = route?.params?.data;
@@ -205,12 +206,19 @@ export const EditGoodsScreen = ({ navigation, route }) => {
       console.log(e);
     }
   };
-  console.log(images)
   return (
-    <View style={globalStyles.container}>
-      <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+    <View style={[globalStyles.container,
+      Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+
+    ]}>
+      <ScrollView contentContainerStyle={[globalStyles.scrollContainer,
+
+      ]} bounces={false}>
         <StatusBar barStyle="dark-content" hidden={false} backgroundColor={Colors.blueBackground} />
-        <View style={styles.headerContainer}>
+        <View style={[styles.headerContainer,
+          Platform.OS === 'ios' &&{paddingTop:  (getStatusBarHeight(true) + globalHeight(20))}
+
+        ]}>
           <Text style={styles.addText}>Добавить товар</Text>
           <View style={styles.cameraContainer}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.contScroll}>

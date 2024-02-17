@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { styles } from "./styles";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Image } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Image, ActivityIndicator } from "react-native";
 import {
   Loading,
   BackButton,
@@ -16,6 +16,7 @@ import { checkTokens } from "../../../../utils";
 import io from "socket.io-client";
 
 import { useDispatch, useSelector } from "react-redux";
+import ImageView from "react-native-image-viewing";
 
 let socketNew = null;
 
@@ -29,13 +30,16 @@ export const MessagesScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const store = useSelector((st) => st.customer);
   const [token, setToken] = useState("");
+  const [active,setActive] = useState(false)
+  const [activeImage,setActiveImage] = useState({})
   const user = route.params?.item;
   const state = route.params?.state;
-  const url = BaseUrl + `chat/messages`;
-  const url1 = BaseUrl + "chat/user";
+  const url = `ws://194.58.121.218:3001/chat/messages`;
+  const url1 = "ws://194.58.121.218:3001/chat/user";
   useEffect(() => {
     setTokFunc();
   }, []);
+  const [loading, setLoading] = useState(false);
 
   const setTokFunc = async () => {
     setVisible(true);
@@ -63,6 +67,11 @@ export const MessagesScreen = ({ navigation, route }) => {
   const getMessageFunc = () => {
     socketNew.on("messages", (messages) => {
       const arr = messages.messages;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].isImage) {
+          arr[i].play = false;
+        }
+      }
       setChat([...arr]);
       setVisible(false);
       setScrollToEnd(true);
@@ -79,7 +88,7 @@ export const MessagesScreen = ({ navigation, route }) => {
     try {
       ChooseImage(async (imageRes) => {
         if (!imageRes.didCancel) {
-          socketNew.emit("send-img",`data:image/png;base64,${imageRes.assets[0].base64}`)
+          socketNew.emit("send-img", `data:image/png;base64,${imageRes.assets[0].base64}`);
         }
       });
     } catch (err) {
@@ -95,6 +104,7 @@ export const MessagesScreen = ({ navigation, route }) => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
+        bounces={false}
         ref={scrollViewRef}
         onContentSizeChange={() => {
           if (scrollToEnd && chat.length) {
@@ -109,23 +119,66 @@ export const MessagesScreen = ({ navigation, route }) => {
           return (
             <View
               style={[styles.placeHolderImageViewText,
-                item.role !== "seller" || item.role === "admin" ? styles.left : styles.right,
-                item.isImage ? styles.placeHolderImageViewImg : null,
+                { alignItems: item.role !== "user" || item.role === "admin" ? "flex-start" : "flex-end" },
               ]}
-              key={index}>
-              {item.isImage ?
-                <Image source={{ uri: BaseUrl + item.text }} style={styles.imgMsg} />
-                :
-                <Text style={[
-                  globalStyles.titleText,
-                  globalStyles.titleTextSmall,
-                  globalStyles.weightLight,
-                  styles.placeholderText,
-                  { color: "white" },
-                ]}>{item.text}</Text>
-              }
+            >
+              <View
+                style={[styles.content,
+                  item.role !== "user" || item.role === "admin" ? styles.left : styles.right,
+                ]}
+                key={index}>
+                {item.isImage ?
+                  <TouchableOpacity onPress={() =>{
+                    if(!item.play) {
+                      setActiveImage([{ uri: BaseUrl + item.text }])
+                      setActive(true)
+                    }}}>
+                    {item.play ? (
+                      <ActivityIndicator
+                        size={40}
+                        color={"#569690"}
+                        style={{
+                          position: "absolute",
+                          zIndex: 10,
+                          bottom: 0,
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                        }}
+                      />
+                    ) : null}
+                    <Image
+                      onLoadStart={e => {
+                        item.play = true;
+                        setChat([...chat]);
 
+                      }}
+                      onLoad={e => {
+                        item.play = false;
+                        setChat([...chat]);
+                      }}
+                      onLoadEnd={e => {
+                        item.play = false;
+                        setChat([...chat]);
+
+                      }}
+                      source={{ uri: BaseUrl + item.text }}
+                      style={styles.imgMsg} />
+                  </TouchableOpacity>
+
+                  :
+                  <Text style={[
+                    globalStyles.titleText,
+                    globalStyles.titleTextSmall,
+                    globalStyles.weightLight,
+                    styles.placeholderText,
+                    { color: "white" },
+                  ]}>{item.text}</Text>
+                }
+
+              </View>
             </View>
+
           );
         })}
       </ScrollView>
@@ -149,7 +202,15 @@ export const MessagesScreen = ({ navigation, route }) => {
           <Image source={sendIcon} style={styles.chatIcon} />
         </TouchableOpacity>
       </View>
-
+      <ImageView
+        images={activeImage}
+        imageIndex={0}
+        visible={active}
+        onRequestClose={() => {
+          setActive(false)
+          setActiveImage({})
+        }}
+      />
       <Loading loading={visible} />
     </View>
   );

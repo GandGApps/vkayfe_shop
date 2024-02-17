@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "727433474225",
-    "project_id": "prosto-podari-7de3c",
-    "storage_bucket": "prosto-podari-7de3c.appspot.com"
+    "project_number": "358782134517",
+    "project_id": "vkaife-79326",
+    "storage_bucket": "vkaife-79326.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:727433474225:android:15d5be5a26d5c1706f3290",
+        "mobilesdk_app_id": "1:358782134517:android:e73c8bc8a654761bdbbdbc",
         "android_client_info": {
           "package_name": "com.gift_shop"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD2eeyjInrlrUHhhWgUbdAOkD4QbZS9BYA"
+          "current_key": "AIzaSyABCg_ObWu69mBVxAEfcO71ukUsGYs6Vag"
         }
       ],
       "services": {

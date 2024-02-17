@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { styles } from "./styles";
-import { FlatList, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Platform, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import { Colors, globalStyles } from "../../../../constants";
-import { ChatData_, FinancialForm } from "../../../../components";
+import { ChatData_, FinancialForm, globalHeight, globalWidth } from "../../../../components";
 import { ChatForm } from "../../../../components/form/chatForm";
 import axiosInstance from "../../../../networking/axiosInstance";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 
 export const ChatScreen = ({ navigation }) => {
@@ -24,7 +25,7 @@ export const ChatScreen = ({ navigation }) => {
     try {
       const response = await axiosInstance.get(`/chat/im`);
       // const filterArr = response.data.filter((it) => it.priority === "admin");
-      // console.log(response)
+      console.log(response)
       setData(response.data);
       changeStateFunc("За сегодня", response.data);
     } catch (e) {
@@ -54,11 +55,17 @@ export const ChatScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={globalStyles.container}>
+    <View style={[globalStyles.container,
+      Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+
+    ]}>
       <StatusBar barStyle="dark-content" hidden={false} backgroundColor={Colors.blueBackground} />
-      <View style={styles.headerContainer}>
+      <View style={[styles.headerContainer,
+        Platform.OS === 'ios' &&{paddingTop:  (getStatusBarHeight(true) +globalWidth(15))}
+      ]}>
         <Text
-          style={[globalStyles.titleText, globalStyles.textAlignLeft, globalStyles.weightBold, globalStyles.titleTextBig]}>Сообщения</Text>
+          style={[globalStyles.titleText, globalStyles.textAlignLeft, globalStyles.weightBold, globalStyles.titleTextBig,{    paddingTop:Platform.OS === 'ios' ? globalHeight(10) : 0
+          }]}>Сообщения</Text>
         <View style={[globalStyles.row, styles.headerFooter]}>
           <TouchableOpacity
             style={active === "За сегодня" && styles.activeText}

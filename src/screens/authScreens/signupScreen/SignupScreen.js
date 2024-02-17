@@ -20,7 +20,7 @@ import {
   phoneValidation,
   validateEmail,
 } from "../../../components";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { AppButton, AppForm, AppInput, BackButton } from "../../../components";
 
 import line from "../../../assets/images/line.png";
@@ -30,6 +30,7 @@ import { removeTokens, setTokens } from "../../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import SelectDropdown from "react-native-select-dropdown";
 import AsyncStorage from "@react-native-community/async-storage";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 async function setState() {
   try {
@@ -46,7 +47,7 @@ export const SignupScreen = ({ navigation, route }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [phone, setPhone] = useState("+778");
+  const [phone, setPhone] = useState("+7");
   const [password, setPassword] = useState("");
   const [legalName, setLegalName] = useState("");
   const [repPassword, setRepPassword] = useState("");
@@ -169,8 +170,13 @@ export const SignupScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={globalStyles.container}>
-      <ScrollView contentContainerStyle={[styles.scrollContainer, globalStyles.scrollContainer]}>
+    <View style={[globalStyles.container,
+      Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+    ]}>
+      <ScrollView contentContainerStyle={[styles.scrollContainer, globalStyles.scrollContainer,
+
+
+      ]} bounces={false}>
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             {!Object.keys(user_data).length && (
@@ -212,7 +218,9 @@ export const SignupScreen = ({ navigation, route }) => {
                     keyboardType={"numeric"}
                     value={phone}
                     onChangeText={(e) => {
-                      onChangeTextFunc(e, setPhone);
+                      if(e.length <=12){
+                        onChangeTextFunc(e, setPhone);
+                      }
                     }}
                   />
                   <AppInput

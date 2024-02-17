@@ -4,10 +4,11 @@ import ChatNavigation from "./ChatNavigation";
 import HomeNavigation from "./HomeNavigation";
 import ProfileNavigation from "./ProfileNavigation";
 import { globalHeight, globalWidth } from "../components";
-import { Image, View, StyleSheet, Text, Platform } from "react-native";
+import { Image, View, StyleSheet, Text, Platform, Keyboard } from "react-native";
 import ApplicationsNavigation from "./ApplicationsNavigation";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {  useSelector } from "react-redux";
 import {
   AddName, AddScreenName, ApplicationsDataName,
   ApplicationsName,
@@ -18,14 +19,45 @@ import {
   ProfileName, PromotionServicesName, SaveEditProfileName, SaveItemName,
   ShopDataName, WaitingName,MessagesName
 } from "../constants";
+import io from "socket.io-client";
+import { useEffect, useState } from "react";
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigation() {
+  const user = useSelector(st=>st.customer)
+  const [orders,setOrders] = useState(0)
+  const [messages,setMessages] = useState(0)
+
+  const socket = io.connect(`http://194.58.121.218:3001/count/messages/seller?seller_id=${user._id}`);
+  const socket1 = io.connect(`http://194.58.121.218:3001/count/orders?seller_id=${user._id}`);
+  socket1.on('count', (data) => {
+    setOrders(data.count);
+  });
+  socket.on('count', (data) => {
+    setMessages(data.count)
+  });
+  const [keyboardStatus, setKeyboardStatus] = useState();
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardStatus(true);
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardStatus(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
+        tabBarHideOnKeyboard:true,
         tabBarActiveTintColor: Colors.tabBarActiveTintColor,
         tabBarStyle: styles.tabBarStyle,
         tabBarIcon: ({ focused, color, size }) => {
@@ -33,32 +65,34 @@ export default function TabNavigation() {
           let imageSourceActive = null;
           let chatIcon = null
           let applicationIcon = null
-          if (route.name === HomeName) {
-            imageSource = require("../assets/images/homeIcon.png");
-            imageSourceActive = require("../assets/images/homeIconActive.png");
-          }
-          if (route.name === ApplicationsName) {
-            applicationIcon = 4
-            imageSource = require("../assets/images/applicationsIcon.png");
-            imageSourceActive = require("../assets/images/applicatiosIconActive.png");
+          if(!keyboardStatus){
+            if (route.name === HomeName) {
+              imageSource = require("../assets/images/homeIcon.png");
+              imageSourceActive = require("../assets/images/homeIconActive.png");
+            }
+            if (route.name === ApplicationsName) {
+              applicationIcon = orders
+              imageSource = require("../assets/images/applicationsIcon.png");
+              imageSourceActive = require("../assets/images/applicatiosIconActive.png");
 
-          }
-          if (route.name === AddName) {
-            imageSource = require("../assets/images/addIcon.png");
-            imageSourceActive = require("../assets/images/addIconActive.png");
+            }
+            if (route.name === AddName) {
+              imageSource = require("../assets/images/addIcon.png");
+              imageSourceActive = require("../assets/images/addIconActive.png");
 
-          }
-          if (route.name === ChatName) {
-            imageSource = require("../assets/images/chatIcon.png");
-            chatIcon = 4
-            imageSourceActive = require("../assets/images/chatIconActive.png");
+            }
+            if (route.name === ChatName) {
+              imageSource = require("../assets/images/chatIcon.png");
+              chatIcon = messages
+              imageSourceActive = require("../assets/images/chatIconActive.png");
 
+            }
+            if (route.name === ProfileName) {
+              imageSource = require("../assets/images/profileIcon.png");
+              imageSourceActive = require("../assets/images/profileIconActive.png");
+            }
           }
-          if (route.name === ProfileName) {
-            imageSource = require("../assets/images/profileIcon.png");
-            imageSourceActive = require("../assets/images/profileIconActive.png");
 
-          }
           return (
             <View style={styles.container}>
               <Image

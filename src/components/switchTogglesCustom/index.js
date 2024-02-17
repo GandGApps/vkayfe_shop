@@ -11,15 +11,22 @@ export function SwitchTogglesCustom({ trueFalse, text, title, topViewStyle, img,
   const axiosFunc = async () => {
     if (status) {
       try {
-        proFunc(-1);
+
         const response = await axiosInstance.put(`/goods/unpromote?good_id=${item._id}`);
+        setStatus(!status);
+        proFunc(-1);
+        console.log(response,'ffff')
+
       } catch (e) {
         console.log(e);
       }
     } else {
       try {
-        proFunc(1);
+
         const response = await axiosInstance.put(`/goods/promote?good_id=${item._id}`);
+        setStatus(!status);
+        proFunc(1);
+        console.log(response,'ffff')
       } catch (e) {
         console.log(e);
       }
@@ -36,7 +43,7 @@ export function SwitchTogglesCustom({ trueFalse, text, title, topViewStyle, img,
       <SwitchToggle
         switchOn={status}
         onPress={() => {
-          setStatus(!status);
+          !proFunc && setStatus(!status);
           proFunc && axiosFunc();
         }}
         circleColorOff={status ? Colors.tifany : "#FFF"}

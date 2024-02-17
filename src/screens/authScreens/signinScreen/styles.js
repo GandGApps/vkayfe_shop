@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   },
   lineImg: {
     marginTop: -1,
-    height: height/2,
+    height: height/1.8,
     width: globalWidth(82)
   },
   formContainer: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
   backContainer: {
     zIndex: 1,
     position: "absolute",
-    top: globalHeight(20),
+    top: globalHeight(30),
   },
   linePink: {
     width: 82,

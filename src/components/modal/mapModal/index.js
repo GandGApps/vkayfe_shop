@@ -1,29 +1,33 @@
 import { styles } from "./styles";
 import React from "react";
-import { View, TouchableOpacity, Image, Text, ScrollView } from "react-native";
+import { View, TouchableOpacity, Image, Text, ScrollView, Platform } from "react-native";
 import Modal from "react-native-modal";
 import closeIcon from "../../../assets/images/closeIcon.png";
 import wing from "../../../assets/images/wing.png";
-import place from "../../../assets/images/place.png";
+import place from "../../../assets/images/wing.png";
 import search from "../../../assets/images/search.png";
 
-import { AppInput, AppButton } from "../../../components";
+import { AppInput, AppButton, globalWidth } from "../../index";
 import { YaMap, Marker, Suggest, Circle } from "react-native-yamap";
 import { globalStyles } from "../../../constants";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 
 export function MapModal(props) {
-  console.log(props.data);
   return (
     <Modal
       visible={props.visible}
       testID={"modal"}
       style={{ padding: 0, margin: 0 }}
       backdropColor={"rgba(250, 250, 250, 0.5)"}
+      avoidKeyboard={true}
     >
-      <View style={styles.container}>
+
+      <View style={[styles.container,
+        Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+
+      ]}>
         <YaMap
-          userLocationIcon={{ uri: "https://www.clipartmax.com/png/middle/180-1801760_pin-png.png" }}
           initialRegion={props.location}
           showUserPosition={false}
           rotateGesturesEnabled={false}
@@ -37,7 +41,7 @@ export function MapModal(props) {
           }}>
           <Marker
             point={props.location}
-            scale={1.2}
+            scale={.05}
             source={wing}
           />
         </YaMap>
@@ -66,7 +70,11 @@ export function MapModal(props) {
                 </View>
                 {props.data.map((item, index) => {
                   return (
-                    <TouchableOpacity key={index} style={styles.complView} onPress={() => {
+                    <TouchableOpacity key={index} style={[styles.complView,
+                      index === 0  ? { paddingBottom: globalWidth(10) } :
+                        { paddingVertical: globalWidth(10) }
+
+                    ]} onPress={() => {
                       props.countryFunc(item, true);
                       props.setFlag1(false)
                       props.setFlag(false);
@@ -100,7 +108,10 @@ export function MapModal(props) {
                 </View>
                 {props.data1.map((item, index) => {
                   return (
-                    <TouchableOpacity key={index} style={styles.complView} onPress={() => {
+                    <TouchableOpacity key={index} style={[styles.complView,
+                      index === 0  ? { paddingBottom: globalWidth(10) } :
+                        { paddingVertical: globalWidth(10) }
+                    ]} onPress={() => {
                       props.addressFunc(item, true);
                       props.setFlag(false);
                       props.setFlag1(false)

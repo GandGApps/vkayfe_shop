@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { styles } from "./styles";
-import { ChooseName, CreateShopName, globalStyles, SET_CUSTOMER, SET_SHOP } from "../../../constants";
-import { Image, ScrollView, Text, View } from "react-native";
+import { ChooseName, CreateShopName, globalStyles, SET_CUSTOMER, SET_SHOP, SignInName } from "../../../constants";
+import { Image, Platform, ScrollView, StatusBar, Text, View } from "react-native";
 
 import giftImg from "../../../assets/images/gift.png";
 import { AppButton, AppForm, Loading } from "../../../components";
@@ -48,7 +48,7 @@ export const SplashScreen = ({ navigation }) => {
       await axiosFunc();
     } else {
       setLoading(false);
-      navigation.navigate(ChooseName);
+      navigation.navigate(SignInName);
     }
   };
 
@@ -67,13 +67,18 @@ export const SplashScreen = ({ navigation }) => {
       }
       setLoading(false);
     } catch (e) {
+      navigation.navigate(SignInName);
+
       setLoading(false);
       console.log(e);
     }
   };
 
   return (
-    <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+    <ScrollView contentContainerStyle={globalStyles.scrollContainer} bounces={false}>
+      {Platform.OS === 'android' &&
+        <StatusBar hidden />
+      }
       <View style={[globalStyles.flexCenter, styles.splashContainer]}>
         <View style={styles.headerContainer}>
           <Image source={giftImg} style={styles.giftImg} />

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { Colors } from "../colors";
 import { globalHeight, globalWidth } from "../../components";
 
@@ -8,6 +8,7 @@ export const globalStyles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    paddingTop:Platform.OS === 'ios' ? globalHeight(25) : 0
   },
   flexCenter: {
     flex: 1,

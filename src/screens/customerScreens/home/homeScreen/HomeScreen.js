@@ -3,13 +3,14 @@ import { styles } from "./styles";
 import { BaseUrl, Colors, FilterName, globalStyles } from "../../../../constants";
 import { Loading } from "../../../../components";
 import { FormGoods, SwitchTogglesCustom, ArciveModal } from "../../../../components";
-import { FlatList, Image, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Platform, StatusBar, Text, TouchableOpacity, View } from "react-native";
 
 import FilterIcon from "../../../../assets/images/filter.png";
 import bottomIcon from "../../../../assets/images/bottomIcon.png";
 import winIcon from "../../../../assets/images/winIcon.png";
 import { useSelector } from "react-redux";
 import axiosInstance from "../../../../networking/axiosInstance";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const HomeScreen = ({ navigation }) => {
   const store = useSelector((st) => st.customer);
@@ -22,7 +23,7 @@ export const HomeScreen = ({ navigation }) => {
   const [stateArcive, setStateArcive] = useState(false);
   const [textArcive,setTextArcive] = useState("Все")
   const arciveStateFunc = (st) => setStateArcive(st);
-
+  console.log(store)
   useEffect(() => {
     if (Object.keys(filter).length) {
       getFilter();
@@ -112,9 +113,13 @@ export const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={globalStyles.container}>
+    <View style={[globalStyles.container,
+      Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+    ]}>
       <StatusBar barStyle="dark-content" backgroundColor={Colors.blueBackground} />
-      <View style={styles.headerContainer}>
+      <View style={[styles.headerContainer,
+        Platform.OS === 'ios' &&{paddingTop:  (getStatusBarHeight(true) +8)}
+      ]}>
         <View style={styles.headerTextContainer}>
           <Text style={[globalStyles.titleText, globalStyles.titleTextBig]}>Мои товары</Text>
           <Text style={[globalStyles.titleText, globalStyles.titleTextSmall]}>{goodsData.length} шт</Text>
@@ -135,7 +140,7 @@ export const HomeScreen = ({ navigation }) => {
         </View>
         <View style={styles.HeaderFooter}>
           <Image source={winIcon} style={styles.winIconStyle} />
-          <Text style={[styles.headerFooterText, globalStyles.titleText, globalStyles.titleTextSmall]}>Товары с
+          <Text style={[styles.headerFooterText, globalStyles.titleText, globalStyles.titleTextSmall,styles.prod]}>Товары с
             продвижением: {promotNum} шт</Text>
         </View>
       </View>

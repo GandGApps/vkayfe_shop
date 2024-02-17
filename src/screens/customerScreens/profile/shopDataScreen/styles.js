@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     justifyContent:'space-between'
   },
   headerContainer: {
-    paddingVertical: globalHeight(21),
+    paddingBottom: globalHeight(21),
     backgroundColor: Colors.blueBackground,
     borderBottomWidth: 1,
     borderColor: Colors.borderGray,
@@ -33,6 +33,7 @@ export const styles = StyleSheet.create({
     height: globalHeight(16),
     resizeMode: "contain",
     marginRight: globalWidth(9),
+    tintColor:'#0BC5BA'
   },
   IdText: {
     marginLeft: globalWidth(20),

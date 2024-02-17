@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { checkUser, setTokens } from "../../../utils";
 import axiosInstance from "../../../networking/axiosInstance";
 import { globalStyles, SET_CUSTOMER, SignupName } from "../../../constants";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Image, ScrollView, Text, TouchableOpacity, View,Platform } from "react-native";
 import {
   AppButton,
   AppForm,
@@ -13,11 +13,28 @@ import {
   passwordValidate,
   validateEmail,
 } from "../../../components";
+import messaging from "@react-native-firebase/messaging";
 
 import line from "../../../assets/images/line.png";
 import pinkMonster from "../../../assets/images/pinkMonster.png";
 import giftIconPink from "../../../assets/images/giftIconPink.png";
 import AsyncStorage from "@react-native-community/async-storage";
+import { getStatusBarHeight } from "react-native-status-bar-height";
+
+
+const getFcmToken = async () => {
+  try {
+    const fcmToken = await messaging().getToken();
+    if (!!fcmToken) {
+      await AsyncStorage.setItem("fcmToken", fcmToken);
+    }
+    return fcmToken;
+  } catch (error) {
+    alert(error?.message);
+  }
+};
+
+
 async function setState() {
   try {
     await AsyncStorage.setItem("state", JSON.stringify(true));
@@ -26,6 +43,7 @@ async function setState() {
     throw error;
   }
 }
+
 export const SignIn = ({ navigation }) => {
   let dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -38,32 +56,27 @@ export const SignIn = ({ navigation }) => {
     set(e);
   };
   const navigationFunc = async () => {
+
     if (validateEmail(email) && password.length >= 8) {
-      await axiosFunc();
+      await checkedData();
     } else if (!validateEmail(email)) {
       setError("Укажите Email");
     } else if (password.length < 8) {
       setError("Укажите Пароль");
     }
   };
-
-  const axiosFunc = async () => {
+  const checkedData = async () => {
     setLoading(true);
     try {
       const data = { email, password };
       const response = await axiosInstance.post("/users/login/seller", data);
       await setTokens(response?.data.token);
-      await setState()
+      await setState();
       dispatch({
         type: SET_CUSTOMER,
         payload: response.data.user_data,
       });
-      if (Object.keys(response?.data?.storesList).length) {
-        navigation.replace("TabNavigation");
-      } else {
-        checkUser(response?.data?.user_data, navigation);
-      }
-      setLoading(false);
+      await axiosFunc(response.data);
     } catch (e) {
       setLoading(false);
       console.log(e);
@@ -71,9 +84,34 @@ export const SignIn = ({ navigation }) => {
     }
   };
 
+  const axiosFunc = async (response) => {
+    let checkToken = await getFcmToken()
+    console.log(checkToken)
+    try {
+      const res = await axiosInstance.post("/users/fcm", {
+        is_seller: true,
+        token:checkToken
+      });
+
+      if (Object.keys(response?.storesList).length) {
+        navigation.replace("TabNavigation");
+      } else {
+        checkUser(response?.user_data, navigation);
+      }
+      setLoading(false);
+
+    } catch (e) {
+    console.log(e,'fd')
+      setLoading(false);
+
+    }
+  };
+
 
   return (
-    <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+    <ScrollView style={[globalStyles.scrollContainer,
+      Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+    ]} bounces={false}>
       <View style={[styles.container, globalStyles.container]}>
         <View style={styles.headerContainer}>
           <View style={styles.backContainer}>

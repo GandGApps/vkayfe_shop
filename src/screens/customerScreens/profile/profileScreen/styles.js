@@ -33,6 +33,7 @@ export const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: Colors.borderGray,
     position: "relative",
+    marginTop:globalWidth(5)
   },
   shopIcon: {
     width: globalWidth(65),
@@ -80,6 +81,7 @@ export const styles = StyleSheet.create({
     height: globalHeight(12),
     resizeMode: "contain",
     marginRight: globalWidth(9),
+    tintColor:'#0BC5BA'
   },
   containerHeaderText: {
     justifyContent: "space-between",

@@ -27,8 +27,9 @@ export const styles = StyleSheet.create({
     marginTop: globalHeight(45),
   },
   contentText: {
-    marginTop: globalHeight(30),
-    marginHorizontal: globalWidth(50),
+    marginTop: globalHeight(20),
+    marginHorizontal: globalWidth(20),
+    textAlign:'left'
   },
 
   activeContainer: {

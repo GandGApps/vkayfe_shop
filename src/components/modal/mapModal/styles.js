@@ -1,6 +1,7 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { globalHeight, globalWidth } from "../../dimensions";
 import { Colors } from "../../../constants";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 let width = Dimensions.get("window").width;
 let height = Dimensions.get("window").height;
@@ -29,7 +30,7 @@ export const styles = StyleSheet.create({
     width:width,
     height:globalHeight(25),
     marginRight: globalWidth(20),
-    marginVertical:globalHeight(10),
+    marginVertical:globalHeight(15),
   },
   back_button: {
     width: globalHeight(20),
@@ -119,14 +120,16 @@ export const styles = StyleSheet.create({
     zIndex:10,
     left: globalWidth(0),
     bottom:globalHeight(15),
+    tintColor:'#0BC5BA'
   },
   complView:{
     borderBottomWidth:1,
     borderBottomColor:Colors.borderGray,
-    paddingVertical:globalWidth(10),
     marginHorizontal:globalWidth(10)
   },
   viewSearch:{
     marginHorizontal:globalWidth(30),
+    paddingTop: Platform.OS === 'ios' && (getStatusBarHeight(true) +globalHeight(30))
+
   }
 });

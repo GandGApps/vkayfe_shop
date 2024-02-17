@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { styles } from "./styles";
-import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Image, Platform, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 
 import rightIcon from "../../../../assets/images/rightIcon.png";
 import bottomIcon from "../../../../assets/images/bottomIcon.png";
 import shopIcon from "../../../../assets/images/shopIcon.png";
-import place from "../../../../assets/images/place.png";
+import place from "../../../../assets/images/wing.png";
 import {
   BaseUrl,
   Colors,
@@ -16,9 +16,10 @@ import {
   ShopDataName,
   LoremName,
 } from "../../../../constants";
-import { ChangeShopModal, Loading } from "../../../../components";
+import { ChangeShopModal, globalHeight, Loading } from "../../../../components";
 import axiosInstance from "../../../../networking/axiosInstance";
 import { useSelector } from "react-redux";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const ProfileScreen = ({ navigation }) => {
   const store = useSelector(st => st.customer);
@@ -40,6 +41,10 @@ export const ProfileScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
+  useEffect(() => {
+      checkActiveFunc();
+  }, [store]);
+
   const loadingFunc = (val) => setLoading(val);
   const modalFunc = (state) => setModalState(state);
   const navigationFunc = (nav) => {
@@ -51,7 +56,7 @@ export const ProfileScreen = ({ navigation }) => {
 
   const checkActiveFunc = async () => {
     try {
-      const response = await axiosInstance.get("/users/check-sub");
+      const response = await axiosInstance.get(`/users/check-sub?store_id=${shop._id}`);
       setState(response.data);
     } catch (e) {
       console.log(e);
@@ -68,10 +73,16 @@ export const ProfileScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={globalStyles.container}>
-      <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
-        <StatusBar barStyle="dark-content" hidden={false} backgroundColor={Colors.blueBackground} />
-        <View style={styles.headerContainer}>
+    <View style={[globalStyles.container,
+      Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+    ]}>
+      <StatusBar barStyle="dark-content" hidden={false} backgroundColor={Colors.blueBackground} />
+      <ScrollView contentContainerStyle={[globalStyles.scrollContainer,
+      ]} bounces={false}>
+        <View style={[styles.headerContainer,
+          Platform.OS === 'ios' &&{paddingTop:  (getStatusBarHeight(true) + globalHeight(30))}
+
+        ]}>
           <View style={[styles.headerShop, globalStyles.row]}>
             <View style={globalStyles.row}>
               <Image source={{ uri: BaseUrl + "/" + shop?.logo_url }} style={styles.shopIcon} />
@@ -88,7 +99,7 @@ export const ProfileScreen = ({ navigation }) => {
             </View>
             <View style={styles.containerRight}>
               <Text style={[globalStyles.titleText, globalStyles.weightLight, styles.placeText, styles.idText]}>ID:
-                {shop?._id.substring(15)}</Text>
+                {shop?._id?.substring(15)}</Text>
             </View>
           </View>
           <View style={styles.addShopContainer}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { styles } from "./styles";
-import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
+import { Image, Platform, ScrollView, StatusBar, Text, TouchableOpacity, View } from "react-native";
 import cameraIcon from "../../../../assets/images/cameraIcon.png";
 import {
   AppButton,
@@ -20,6 +20,7 @@ import plusC from "../../../../assets/images/plusC.png";
 import minusC from "../../../../assets/images/minusC.png";
 import category_bottom from "../../../../assets/images/categroy_bottom.png";
 import {FileHelper} from "../../../../../FilesHelper";
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 export const AddScreen = ({ navigation, route }) => {
   const store = useSelector(st => st.customer);
@@ -176,14 +177,17 @@ export const AddScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={globalStyles.container}>
-      <ScrollView contentContainerStyle={globalStyles.scrollContainer}>
+    <View style={[globalStyles.container,
+      Platform.OS === 'ios' &&{marginTop: - (getStatusBarHeight(true) +8)}
+
+    ]}>
+      <ScrollView contentContainerStyle={[globalStyles.scrollContainer,
+      ]} bounces={false}>
         <StatusBar barStyle="dark-content" hidden={false} backgroundColor={Colors.blueBackground} />
-        <View style={styles.headerContainer}>
+        <View style={[styles.headerContainer,        Platform.OS === 'ios' &&{paddingTop:  (getStatusBarHeight(true) +8)}
+        ]}>
           <Text style={styles.addText}>Добавить товар</Text>
           <View style={styles.cameraContainer}>
-
-
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.contScroll}>
                 <View>
                   <TouchableOpacity style={[styles.AddPhotoContainer, { borderColor: photoColor }]}
